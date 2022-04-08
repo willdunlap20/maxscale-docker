@@ -5,48 +5,7 @@ This Docker image runs the latest 2.4 version of MariaDB MaxScale.
 -	[Travis CI:  
 	![build status badge](https://img.shields.io/travis/mariadb-corporation/maxscale-docker/master.svg)](https://travis-ci.org/mariadb-corporation/maxscale-docker/branches)
 
-
-## Building
-
-Run the following command in this directory to build the image.
-
-```
-make build-image
-```
-
 ## Running
-To pull the latest MaxScale image from docker hub:
-```
-docker pull mariadb/maxscale:latest
-```
-
-To run the MaxScale container overriding the container instance name to 'mxs':
-```
-docker run -d --name mxs mariadb/maxscale:latest
-```
-
-Read on for details of how to configure the MaxScale container.
-
-## Configuration
-The default configuration for the container is fairly minimalist and can be found in [this configuration file](./maxscale.cnf). At a high level the following is enabled:
-- REST API with default user and password (admin / mariadb) listening to all hosts (0.0.0.0)
-
-### Configure via REST API
-The REST API by default listens on port 8989. To interact with this from the docker host, requires a port mapping to specified on container startup. The example below shows listing the current services via curl:
-```
-docker run -d -p 8989:8989 --name mxs mariadb/maxscale:latest
-curl -u admin:mariadb -H "Content-Type: application/json" http://localhost:8989/v1/services
-
-```
-### Configure via maxscale.cnf File
-An alternative model is to provide an overlay maxscale.cnf file that provides additional configuration for the cluster to be managed. To do this, you must mount your configuration file into `/etc/maxscale.cnf.d/`. When running the container with docker directly pass this using the argument to the `-v` option:
-
-```
-docker run -d --name mxs -v $PWD/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf mariadb/maxscale:2.2
-```
-
-## MaxScale docker-compose setup
-
 [The MaxScale docker-compose setup](./docker-compose.yml) contains MaxScale
 configured with a three node master-slave cluster. To start it, run the
 following commands in this directory.
