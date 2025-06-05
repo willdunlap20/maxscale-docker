@@ -1,4 +1,10 @@
-SET GLOBAL gtid_slave_pos='0-3000-0';
-SET GLOBAL gtid_strict_mode=on;
-CHANGE MASTER TO MASTER_HOST='master', MASTER_PORT=3306, MASTER_USER='maxuser', MASTER_PASSWORD='maxpwd', MASTER_USE_GTID=slave_pos;
-START SLAVE;
+RESET MASTER;
+CREATE DATABASE test;
+
+CREATE USER 'maxuser'@'127.0.0.1' IDENTIFIED BY 'maxpwd';
+CREATE USER 'maxuser'@'%' IDENTIFIED BY 'maxpwd';
+GRANT ALL ON *.* TO 'maxuser'@'127.0.0.1' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'maxuser'@'%' WITH GRANT OPTION;
+
+SET GLOBAL max_connections=10000;
+SET GLOBAL gtid_strict_mode=ON;
