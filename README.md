@@ -12,24 +12,26 @@ This Project sets up a basic sharded database enviroment using two MariaDB shard
 
 To start the enviroment:
 
-```bash
+```
 docker-compose build
 docker-compose up -d
 ```
 
 
+Once the containers are running we can check their condition with the following command
+
 ```
 $ docker-compose exec maxscale maxctrl list servers
-┌─────────┬─────────┬──────┬─────────────┬─────────────────┬──────────┐
-│ Server  │ Address │ Port │ Connections │ State           │ GTID     │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼──────────┤
-│ server1 │ master  │ 3306 │ 0           │ Master, Running │ 0-3000-5 │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼──────────┤
-│ server2 │ slave1  │ 3306 │ 0           │ Slave, Running  │ 0-3000-5 │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼──────────┤
-│ server3 │ slave2  │ 3306 │ 0           │ Running         │ 0-3000-5 │
-└─────────┴─────────┴──────┴─────────────┴─────────────────┴──────────┘
-
+```
+We should see a readout similar to below
+```
+┌─────────┬─────────┬──────┬─────────────┬─────────────────┬──────────┬─────────────────┐
+│ Server  │ Address │ Port │ Connections │ State           │ GTID     │ Monitor         │
+├─────────┼─────────┼──────┼─────────────┼─────────────────┼──────────┼─────────────────┤
+│ server1 │ shard1  │ 3306 │ 0           │ Master, Running │ 0-3000-4 │ MariaDB-Monitor │
+├─────────┼─────────┼──────┼─────────────┼─────────────────┼──────────┼─────────────────┤
+│ server2 │ shard2  │ 3306 │ 0           │ Slave, Running  │ 0-3001-4 │ MariaDB-Monitor │
+└─────────┴─────────┴──────┴─────────────┴─────────────────┴──────────┴─────────────────┘
 ```
 
 The cluster is configured to utilize automatic failover. To illustrate this you can stop the master
