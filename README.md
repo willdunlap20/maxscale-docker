@@ -24,6 +24,12 @@ You can install them on Ubuntu with:
 sudo apt update
 sudo apt install docker.io docker-compose python3 python3-pip mysql-client
 ```
+as well as
+```
+pip3 install mysql-connector-python
+```
+
+Once we have all prerequisites
 
 To start the enviroment:
 ```
