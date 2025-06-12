@@ -10,16 +10,27 @@ This Project sets up a basic sharded database enviroment using two MariaDB shard
 
 ## Running
 
-To start the enviroment:
+### Prerequisites
 
+Make sure you have the following installed:
+
+- **Docker** and **Docker Compose**
+- **Python 3**
+- **MySQL client** (optional, for manual testing)
+
+You can install them on Ubuntu with:
+
+```
+sudo apt update
+sudo apt install docker.io docker-compose python3 python3-pip mysql-client
+```
+
+To start the enviroment:
 ```
 docker-compose build
 docker-compose up -d
 ```
-
-
 Once the containers are running we can check their condition with the following command
-
 ```
 $ docker-compose exec maxscale maxctrl list servers
 ```
@@ -33,36 +44,9 @@ We should see a readout similar to below
 │ server2 │ shard2  │ 3306 │ 0           │ Slave, Running  │ 0-3001-4 │ MariaDB-Monitor │
 └─────────┴─────────┴──────┴─────────────┴─────────────────┴──────────┴─────────────────┘
 ```
-
-The cluster is configured to utilize automatic failover. To illustrate this you can stop the master
-container and watch for maxscale to failover to one of the original slaves and then show it rejoining
-after recovery:
+Once the containers are up and running we have all the requirements installed for running the python query we will execute the following command
 ```
-$ docker-compose stop master
-Stopping maxscaledocker_master_1 ... done
-$ docker-compose exec maxscale maxctrl list servers
-┌─────────┬─────────┬──────┬─────────────┬─────────────────┬─────────────┐
-│ Server  │ Address │ Port │ Connections │ State           │ GTID        │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼─────────────┤
-│ server1 │ master  │ 3306 │ 0           │ Down            │ 0-3000-5    │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼─────────────┤
-│ server2 │ slave1  │ 3306 │ 0           │ Master, Running │ 0-3001-7127 │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼─────────────┤
-│ server3 │ slave2  │ 3306 │ 0           │ Slave, Running  │ 0-3001-7127 │
-└─────────┴─────────┴──────┴─────────────┴─────────────────┴─────────────┘
-$ docker-compose start master
-Starting master ... done
-$ docker-compose exec maxscale maxctrl list servers
-┌─────────┬─────────┬──────┬─────────────┬─────────────────┬─────────────┐
-│ Server  │ Address │ Port │ Connections │ State           │ GTID        │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼─────────────┤
-│ server1 │ master  │ 3306 │ 0           │ Slave, Running  │ 0-3001-7127 │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼─────────────┤
-│ server2 │ slave1  │ 3306 │ 0           │ Master, Running │ 0-3001-7127 │
-├─────────┼─────────┼──────┼─────────────┼─────────────────┼─────────────┤
-│ server3 │ slave2  │ 3306 │ 0           │ Slave, Running  │ 0-3001-7127 │
-└─────────┴─────────┴──────┴─────────────┴─────────────────┴─────────────┘
-
+python3 query.py
 ```
 
 Once complete, to remove the cluster and maxscale containers:
