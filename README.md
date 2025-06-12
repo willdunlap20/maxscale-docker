@@ -92,6 +92,7 @@ The MaxScale container mounts a configuration file from the repo:
             - ./maxscale.cnf.d:/etc/maxscale.cnf.d
 ```
 
+## Taking Down
 
 Once complete, to remove the cluster and maxscale containers:
 
