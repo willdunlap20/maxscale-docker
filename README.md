@@ -50,10 +50,48 @@ We should see a readout similar to below
 │ server2 │ shard2  │ 3306 │ 0           │ Slave, Running  │ 0-3001-4 │ MariaDB-Monitor │
 └─────────┴─────────┴──────┴─────────────┴─────────────────┴──────────┴─────────────────┘
 ```
-Once the containers are up and running we have all the requirements installed for running the python query we will execute the following command
+Once the containers are up and running, and we have all the requirements installed for running the python query we will execute the following command
 ```
 python3 query.py
 ```
+
+## Configuration
+
+By default, the MaxScale container is configured to route SQL queries to two MariaDB shards using the `schemarouter` module.
+
+MaxScale listens on port `4000` for incoming SQL connections. This port is exposed to the host in the `docker-compose.yml` file.
+
+### Manual REST API Access (Optional)
+
+MaxScale also provides a REST API on port `8989` by default. To use it, ensure port 8989 is exposed and then run:
+
+```
+curl -u admin:mariadb http://localhost:8989/v1/maxscale
+```
+
+## Maxscale Docker-Compose Setup
+
+This project uses Docker Compose to bring up a MaxScale container and two MariaDB shard containers. The `docker-compose.yml` file defines the services, networks, ports, and volume mounts.
+
+### Services
+
+- `maxscale`: The MaxScale proxy that routes queries to the correct shard
+- `zipcodes_one`: The first MariaDB shard containing part of the zipcode data
+- `zipcodes_two`: The second MariaDB shard containing the other half
+
+### Ports
+
+- **4000**: Exposed by MaxScale for incoming SQL client connections
+- **3306**: Used internally by the MariaDB shards
+
+### Volumes
+
+The MaxScale container mounts a configuration file from the repo:
+```
+   volumes:
+            - ./maxscale.cnf.d:/etc/maxscale.cnf.d
+```
+
 
 Once complete, to remove the cluster and maxscale containers:
 
