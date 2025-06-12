@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This Project sets up a basic sharded database enviroment using two MariaDB shards and managed through Maxscale. It includes:
+This Project sets up a basic sharded database environment using two MariaDB shards and managed through Maxscale. It includes:
 
 - Two MariaDB containers (`zipcodes_one`, `zipcodes_two`) preloaded with zipcode data
 - A MaxScale container that routes queries across the shards
@@ -31,12 +31,12 @@ pip3 install mysql-connector-python
 
 Once we have all prerequisites
 
-To start the enviroment:
+To start the environment:
 ```
 docker-compose build
 docker-compose up -d
 ```
-Once the containers are running we can check their condition with the following command
+Once the containers are running, we can check their condition with the following command:
 ```
 $ docker-compose exec maxscale maxctrl list servers
 ```
@@ -50,7 +50,7 @@ We should see a readout similar to below
 │ server2 │ shard2  │ 3306 │ 0           │ Slave, Running  │ 0-3001-4 │ MariaDB-Monitor │
 └─────────┴─────────┴──────┴─────────────┴─────────────────┴──────────┴─────────────────┘
 ```
-Once the containers are up and running, and we have all the requirements installed for running the python query we will execute the following command
+Once the containers are up and running, and we have all the requirements installed for running, the Python query we will execute the following command:
 ```
 python3 query.py
 ```
@@ -61,7 +61,7 @@ By default, the MaxScale container is configured to route SQL queries to two Mar
 
 MaxScale listens on port `4000` for incoming SQL connections. This port is exposed to the host in the `docker-compose.yml` file.
 
-### Manual REST API Access (Optional)
+### Manual REST API Access
 
 MaxScale also provides a REST API on port `8989` by default. To use it, ensure port 8989 is exposed and then run:
 
@@ -69,7 +69,7 @@ MaxScale also provides a REST API on port `8989` by default. To use it, ensure p
 curl -u admin:mariadb http://localhost:8989/v1/maxscale
 ```
 
-## Maxscale Docker-Compose Setup
+## MaxScale Docker-Compose Setup
 
 This project uses Docker Compose to bring up a MaxScale container and two MariaDB shard containers. The `docker-compose.yml` file defines the services, networks, ports, and volume mounts.
 
@@ -89,7 +89,7 @@ This project uses Docker Compose to bring up a MaxScale container and two MariaD
 The MaxScale container mounts a configuration file from the repo:
 ```
    volumes:
-            - ./maxscale.cnf.d:/etc/maxscale.cnf.d
+      - ./maxscale.cnf.d:/etc/maxscale.cnf.d
 ```
 
 ## Taking Down
