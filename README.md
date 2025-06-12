@@ -16,7 +16,7 @@ Make sure you have the following installed:
 
 - **Docker** and **Docker Compose**
 - **Python 3**
-- **MySQL client** (optional, for manual testing)
+- **MySQL client**
 
 You can install them on Ubuntu with:
 
